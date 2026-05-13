@@ -10,16 +10,33 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Clarus">
+        android:theme="@style/Theme.Clarus"
+        tools:targetApi="31">
+
+        <!--
+            Hocam Merhaba,
+            Uygulamanın giriş noktası (Entry Point) olarak AcilisEkraniActivity sınıfını belirledik.
+        -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".AcilisEkraniActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Ana Ekran Modülü -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+
+        <activity
+            android:name=".KelimeEkleActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
