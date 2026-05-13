@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FDEFF2"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yeni Kelime Ekle"
+        android:textColor="#7D2039"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="30dp"/>
+
+    <!-- Kelime Girişi -->
+    <EditText
+        android:id="@+id/et_ingilizce_kelime"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="İngilizce Kelime"
+        android:background="@drawable/edittext_arkaplan"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/et_turkce_anlam"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Türkçe Anlamı"
+        android:background="@drawable/edittext_arkaplan"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="30dp"/>
+
+    <!-- Kaydet Butonu -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_kelime_kaydet"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Veritabanına Ekle"
+        android:textColor="@color/white"
+        android:background="@color/visne_detay"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

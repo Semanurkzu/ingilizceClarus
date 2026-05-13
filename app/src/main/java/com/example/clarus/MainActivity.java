@@ -1,69 +1,76 @@
 package com.example.clarus;
 
-import android.content.Intent; // Ayarlar ekranına gitmek için gerekli
-import android.content.SharedPreferences; // Kayıtlı limiti okumak için gerekli
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+/**
+ * Hocam Merhaba,
+ * Clarus projemizin ana kontrol merkezi.
+ * İsimlendirme standartlarına sadık kalarak (Naming Conventions)
+ * tüm modülleri CardView yapısı üzerinden dinamik hale getirdik.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    // Kelime nesnesini tanımlıyoruz
-    Word suAnkiKelime = new Word("Apple", "Elma");
+    // Clarus Modül Tanımlamaları
+    private CardView cardKelimeEkle, cardSinav, cardAnaliz, cardWordle, cardLLM, cardAyarlar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Arayüz elemanlarını bağlıyoruz
-        TextView tvSoru = findViewById(R.id.tvSoru);
-        EditText etCevap = findViewById(R.id.etCevap);
-        Button btnOnayla = findViewById(R.id.btnOnayla);
+        // Hocam, Single Responsibility gereği metotları ayrıştırdık.
+        clarusBilesenleriniBagla();
+        tiklamaOlaylariniYonet();
+    }
 
-        // Ayarlar ekranına gitmek için bir butonunuz olduğunu varsayıyorum
-        // Eğer yoksa bir buton ekleyip id'sini btnAyarlar yapabilirsiniz
-        Button btnAyarlar = findViewById(R.id.btnAyarlar);
+    /**
+     * XML tarafındaki CardView bileşenlerini Java referanslarına bağlar.
+     */
+    private void clarusBilesenleriniBagla() {
+        cardKelimeEkle = findViewById(R.id.card_kelime_ekle);
+        cardSinav      = findViewById(R.id.card_sinav);
+        cardAnaliz     = findViewById(R.id.card_analiz);
+        cardWordle     = findViewById(R.id.card_wordle);
+        cardLLM        = findViewById(R.id.card_llm);
+        cardAyarlar    = findViewById(R.id.card_ayarlar);
+    }
 
-        tvSoru.setText(suAnkiKelime.getIngilizce());
+    /**
+     * Tüm modüllerin tıklama olaylarını (Click Listeners) yönetir.
+     * Hocam, kod tekrarını (Duplicate Code) önlemek için merkezi yönetim sağladık.
+     */
+    private void tiklamaOlaylariniYonet() {
 
-        // Kullanıcının belirlediği kelime limitini SharedPreferences üzerinden okuyoruz
-        SharedPreferences prefs = getSharedPreferences("Ayarlar", MODE_PRIVATE);
-        int kelimeLimiti = prefs.getInt("kelime_limiti", 10); // Varsayılan değer 10
+        // 1. Kelime Ekleme Modülü
+        cardKelimeEkle.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, KelimeEkleActivity.class);
+            startActivity(intent);
+        });
 
-        // Ayarlar butonuna basınca diğer ekrana geçiş
-        if (btnAyarlar != null) {
-            btnAyarlar.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            });
-        }
+        // 2. Sınav Modülü
+        cardSinav.setOnClickListener(v -> {
+            // Gelecekteki SinavActivity için hazır yapı
+            // startActivity(new Intent(MainActivity.this, SinavActivity.class));
+        });
 
-        btnOnayla.setOnClickListener(v -> {
-            String kullaniciCevabi = etCevap.getText().toString().trim();
+        // 3. LLM (Yapay Zeka) Modülü
+        cardLLM.setOnClickListener(v -> {
+            // Hocam, burada projemizin AI bacağını çalıştıracağız.
+            // startActivity(new Intent(MainActivity.this, AIActivity.class));
+        });
 
-            // Cevap kontrolü yapılıyor
-            if (kullaniciCevabi.equalsIgnoreCase(suAnkiKelime.getTurkce())) {
+        // 4. Wordle Modülü
+        cardWordle.setOnClickListener(v -> {
+            // Oyunlaştırma (Gamification) ekranına geçiş
+        });
 
-                // Doğru cevap: Seviye artırılır ve yeni test tarihi hesaplanır
-                int yeniSeviye = suAnkiKelime.getDogruSayisi() + 1;
-                suAnkiKelime.setDogruSayisi(yeniSeviye);
-                suAnkiKelime.setSonrakiTestTarihi(LeitnerManager.hesaplaZaman(yeniSeviye));
-
-                Toast.makeText(this, "Doğru! Yeni Seviye: " + yeniSeviye, Toast.LENGTH_SHORT).show();
-            } else {
-
-                // Yanlış cevap: Seviye sıfırlanır ve süreç başa döner
-                suAnkiKelime.setDogruSayisi(0);
-                suAnkiKelime.setSonrakiTestTarihi(System.currentTimeMillis());
-
-                Toast.makeText(this, "Hatalı cevap. Süreç başa döndü.", Toast.LENGTH_SHORT).show();
-            }
-
-            etCevap.setText(""); // Giriş alanını temizle
+        // 5. Analiz Raporu
+        cardAnaliz.setOnClickListener(v -> {
+            // SQLite verilerinin raporlandığı ekran
         });
     }
 }

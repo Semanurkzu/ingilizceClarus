@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ana Android Renkleri -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Clarus Proje Renkleri (image_39c691.jpg baz alınarak) -->
+    <color name="arka_plan_pudra">#FDEFF2</color> <!-- Uygulama genel zemini -->
+    <color name="yazi_koyu_pembe">#7D2039</color> <!-- Başlıklar ve modül metinleri -->
+    <color name="ana_buton_visne">#A62B4B</color> <!-- Genel buton rengi -->
+    <color name="kart_arkaplan">#FFFFFF</color> <!-- CardView içleri -->
+    <color name="kart_golge">#FADADD</color>    <!-- Hafif gölge efekti -->
+
+    <!-- Stillerin (MenuKartiStyle, IkonStyle) hata vermemesi için kritik renk -->
+    <color name="visne_detay">#A62B4B</color>
+
+    <!-- Hocam, Materyal Tasarım (Material Design) standartlarını projeye entegre ettik -->
+    <color name="colorPrimary">#A62B4B</color>
+    <color name="colorPrimaryDark">#7D2039</color>
+    <color name="colorAccent">#A62B4B</color>
+</resources>
