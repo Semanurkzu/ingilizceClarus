@@ -6,22 +6,59 @@
     android:gravity="center"
     android:padding="20dp">
 
+    <!-- Soru Alanı -->
     <TextView
         android:id="@+id/tvSoru"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Kelime Burada Görünecek"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:layout_marginBottom="20dp" />
 
     <EditText
         android:id="@+id/etCevap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Türkçesini yaz..." />
+        android:hint="Türkçesini yaz..."
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:id="@+id/btnOnayla"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kontrol Et" />
+        android:text="Kontrol Et"
+        android:layout_marginBottom="30dp" />
+
+    <!-- Alt Menü / Diğer Ekranlara Geçiş -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hızlı Menü"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Java kodunda hata veren meşhur Ayarlar Butonu -->
+        <Button
+            android:id="@+id/btnAyarlar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:text="Ayarlar" />
+
+        <Button
+            android:id="@+id/btnRapor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Rapor" />
+    </LinearLayout>
+
 </LinearLayout>
