@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- İZİNLER BURADA OLMALI (application etiketinin dışında) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,31 +14,36 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Clarus"
-        tools:targetApi="31">
+        android:theme="@style/Theme.Clarus">
 
-        <!--
-            Hocam Merhaba,
-            Uygulamanın giriş noktası (Entry Point) olarak AcilisEkraniActivity sınıfını belirledik.
-        -->
+        <!-- Story 3: Ana Sınav Ekranı -->
         <activity
-            android:name=".AcilisEkraniActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Ana Ekran Modülü -->
+        <!-- Story 4: Ayarlar Ekranı -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SettingsActivity"
             android:exported="false" />
 
-
+        <!-- Story 5: Analiz ve Rapor Ekranı -->
         <activity
-            android:name=".KelimeEkleActivity"
+            android:name=".ReportActivity"
+            android:exported="false" />
+
+        <!-- Story 6: Wordle Oyun Ekranı -->
+        <activity
+            android:name=".WordleActivity"
+            android:exported="false" />
+
+        <!-- Story 7: Word Chain Ekranı -->
+        <activity
+            android:name=".StoryChainActivity"
             android:exported="false" />
 
     </application>

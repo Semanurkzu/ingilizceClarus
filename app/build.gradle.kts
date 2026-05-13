@@ -4,16 +4,14 @@ plugins {
 
 android {
     namespace = "com.example.clarus"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    // CompileSdk genelde tam sayı olarak verilir, 34 veya 35 idealdir.
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.clarus"
-        minSdk = 24
-        targetSdk = 36
+        // Story 7'deki getMainExecutor() hatasını çözmek için minSdk 28 yapıldı
+        minSdk = 28
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -40,6 +38,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    // Story 7: Gemini AI ve Asenkron işlemler için gerekli kütüphaneler
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+    implementation("com.google.guava:guava:33.2.1-android")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
