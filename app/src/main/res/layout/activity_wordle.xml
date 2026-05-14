@@ -4,56 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#121213"
-    android:padding="16dp">
+    android:padding="10dp">
 
-    <TextView
+    <!-- Dinamik Oyun Izgarası -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CLARUS WORDLE"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"/>
-
-    <GridLayout
-        android:id="@+id/wordleGrid"
-        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:columnCount="5"
-        android:rowCount="6"
-        android:layout_gravity="center"
-        android:useDefaultMargins="true">
-        <!-- Java kodunda dinamik olarak dolacak -->
-    </GridLayout>
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/llGameBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="20dp"/>
+    </ScrollView>
 
-    <LinearLayout
+    <!-- Mesaj Alanı (Tebrikler vb.) -->
+    <TextView
+        android:id="@+id/tvGameStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:gravity="center">
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-        <EditText
-            android:id="@+id/etTahmin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="5 harf giriniz"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#818384"
-            android:maxLength="5"
-            android:inputType="textCapCharacters"
-            android:backgroundTint="#3A3A3C"/>
+    <!-- Klavyeyi buraya Java ile dinamik ekleyeceğiz -->
+    <LinearLayout
+        android:id="@+id/llKeyboardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"/>
 
-        <Button
-            android:id="@+id/btnTahminEt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GİR"
-            android:backgroundTint="#538D4E"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
 </LinearLayout>

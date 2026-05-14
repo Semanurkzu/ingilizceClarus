@@ -2,29 +2,22 @@ package com.example.clarus;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Hocam Merhaba,
- * Clarus projemizde veri kalıcılığını (Data Persistence) SQLite ile sağlıyoruz.
- * Yeni güncelleme ile 'kullanicilar' tablosunu ekleyerek Authentication (Kimlik Doğrulama)
- * altyapısını kurduk. Versiyonu 2'ye yükselterek 'onUpgrade' mekanizmasını tetikledik.
- */
 public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     private static final String VERITABANI_ADI = "KelimeAtolyesi.db";
-    // Sema, versiyonu 2 yaptım çünkü tablo yapısı değişti.
-    private static final int VERITABANI_VERSIYON = 2;
+    private static final int VERITABANI_VERSIYON = 3; // Seviye ve Tarih için versiyonu yükselttik
 
-    // Kelimeler Tablosu
     private static final String TABLO_KELIMELER = "kelimeler";
     private static final String COL_ID = "id";
     private static final String COL_INGILIZCE = "ingilizce";
     private static final String COL_TURKCE = "turkce";
     private static final String COL_SEVIYE = "seviye";
+    private static final String COL_SON_TEKRAR = "son_tekrar_tarihi";
 
-    // Kullanıcılar Tablosu (YENİ)
     private static final String TABLO_KULLANICILAR = "kullanicilar";
     private static final String COL_USER_ID = "id";
     private static final String COL_EPOSTA = "eposta";
@@ -37,15 +30,14 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Kelimeler Tablosu Oluşturma
         String tabloKelimeOlustur = "CREATE TABLE " + TABLO_KELIMELER + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_INGILIZCE + " TEXT, " +
                 COL_TURKCE + " TEXT, " +
-                COL_SEVIYE + " INTEGER DEFAULT 0)";
+                COL_SEVIYE + " INTEGER DEFAULT 0, " +
+                COL_SON_TEKRAR + " LONG DEFAULT 0)";
         db.execSQL(tabloKelimeOlustur);
 
-        // Kullanıcılar Tablosu Oluşturma (Sema'nın istediği e-posta ve kadi dahil)
         String tabloKullaniciOlustur = "CREATE TABLE " + TABLO_KULLANICILAR + " (" +
                 COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_EPOSTA + " TEXT, " +
@@ -56,44 +48,45 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Geliştirme aşamasında olduğumuz için eski tabloları uçurup yeniden kuruyoruz.
         db.execSQL("DROP TABLE IF EXISTS " + TABLO_KELIMELER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLO_KULLANICILAR);
         onCreate(db);
     }
 
-    // --- KELİME MODÜLÜ METOTLARI ---
+    // Wordle için rastgele kelime seçen metot
+    public String getWordleKelime(int uzunluk) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_INGILIZCE + " FROM " + TABLO_KELIMELER +
+                        " WHERE LENGTH(" + COL_INGILIZCE + ") = ? ORDER BY RANDOM() LIMIT 1",
+                new String[]{String.valueOf(uzunluk)});
+        String kelime = null;
+        if (cursor.moveToFirst()) {
+            kelime = cursor.getString(0).toUpperCase();
+        }
+        cursor.close();
+        return kelime;
+    }
+
     public boolean kelimeEkle(String ing, String tr) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_INGILIZCE, ing.trim().toLowerCase());
         cv.put(COL_TURKCE, tr.trim().toLowerCase());
-
-        long sonuc = db.insert(TABLO_KELIMELER, null, cv);
-        return sonuc != -1;
+        return db.insert(TABLO_KELIMELER, null, cv) != -1;
     }
 
-    // --- KAYIT MODÜLÜ METOTLARI ---
     public boolean kullaniciKaydet(String eposta, String kadi, String sifre) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_EPOSTA, eposta.trim());
         cv.put(COL_KADI, kadi.trim());
-        cv.put(COL_SIFRE, sifre); // Hocam gerçek projede burası hash'lenmelidir.
-
-        long sonuc = db.insert(TABLO_KULLANICILAR, null, cv);
-        db.close();
-        return sonuc != -1;
+        cv.put(COL_SIFRE, sifre);
+        return db.insert(TABLO_KULLANICILAR, null, cv) != -1;
     }
 
-    // --- GİRİŞ MODÜLÜ METOTLARI (Sema Buraya Dikkat) ---
     public boolean girisKontrol(String kadi, String sifre) {
         SQLiteDatabase db = this.getReadableDatabase();
-        // Kullanıcı adı ve şifre eşleşiyor mu kontrol ediyoruz
-        String sorgu = "SELECT * FROM " + TABLO_KULLANICILAR +
-                " WHERE " + COL_KADI + "=? AND " + COL_SIFRE + "=?";
-
-        android.database.Cursor cursor = db.rawQuery(sorgu, new String[]{kadi, sifre});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLO_KULLANICILAR + " WHERE " + COL_KADI + "=? AND " + COL_SIFRE + "=?", new String[]{kadi, sifre});
         boolean sonuc = cursor.getCount() > 0;
         cursor.close();
         return sonuc;

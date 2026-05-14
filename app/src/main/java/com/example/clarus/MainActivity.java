@@ -2,15 +2,14 @@ package com.example.clarus;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 /**
  * Hocam Merhaba,
- * Clarus projemizin ana kontrol merkezi.
- * İsimlendirme standartlarına sadık kalarak (Naming Conventions)
- * tüm modülleri CardView yapısı üzerinden dinamik hale getirdik.
+ * Clarus projemizin ana kontrol merkezi (Dashboard).
+ * Tüm modüller, arkadaşlarımla geliştirdiğimiz spesifik Activity'lere
+ * Intent mekanizması üzerinden gevşek bağlı (Loosely Coupled) şekilde entegre edilmiştir.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -22,14 +21,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hocam, Single Responsibility gereği metotları ayrıştırdık.
+        // Hocam, Clean Code prensipleri gereği başlatma işlemlerini metodize ettik.
         clarusBilesenleriniBagla();
         tiklamaOlaylariniYonet();
     }
 
-    /**
-     * XML tarafındaki CardView bileşenlerini Java referanslarına bağlar.
-     */
     private void clarusBilesenleriniBagla() {
         cardKelimeEkle = findViewById(R.id.card_kelime_ekle);
         cardSinav      = findViewById(R.id.card_sinav);
@@ -39,38 +35,40 @@ public class MainActivity extends AppCompatActivity {
         cardAyarlar    = findViewById(R.id.card_ayarlar);
     }
 
-    /**
-     * Tüm modüllerin tıklama olaylarını (Click Listeners) yönetir.
-     * Hocam, kod tekrarını (Duplicate Code) önlemek için merkezi yönetim sağladık.
-     */
     private void tiklamaOlaylariniYonet() {
 
-        // 1. Kelime Ekleme Modülü
+        // 1. Kelime Ekleme Modülü (Sema'nın modülü)
         cardKelimeEkle.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, KelimeEkleActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, KelimeEkleActivity.class));
         });
 
-        // 2. Sınav Modülü
+        // 2. Sınav Modülü (Leitner Sistemi / Mevcut yapıya göre ayarlandı)
         cardSinav.setOnClickListener(v -> {
-            // Gelecekteki SinavActivity için hazır yapı
+            // Sınav algoritmasını yöneten sınıfa yönlendirme
             // startActivity(new Intent(MainActivity.this, SinavActivity.class));
         });
 
-        // 3. LLM (Yapay Zeka) Modülü
+        // 3. LLM (Yapay Zeka - Story Chain) Modülü
         cardLLM.setOnClickListener(v -> {
-            // Hocam, burada projemizin AI bacağını çalıştıracağız.
-            // startActivity(new Intent(MainActivity.this, AIActivity.class));
+            // Hocam, burada AI tabanlı hikaye üretim modülünü tetikliyoruz.
+            startActivity(new Intent(MainActivity.this, StoryChainActivity.class));
         });
 
-        // 4. Wordle Modülü
+        // 4. Wordle Modülü (Oyunlaştırma)
         cardWordle.setOnClickListener(v -> {
-            // Oyunlaştırma (Gamification) ekranına geçiş
+            // Arkadaşının yazdığı Wordle oyun ekranına geçiş
+            startActivity(new Intent(MainActivity.this, WordleActivity.class));
         });
 
-        // 5. Analiz Raporu
+        // 5. Analiz Raporu Modülü
         cardAnaliz.setOnClickListener(v -> {
-            // SQLite verilerinin raporlandığı ekran
+            // SQLite verilerinin görselleştiği rapor ekranı
+            startActivity(new Intent(MainActivity.this, ReportActivity.class));
+        });
+
+        // 6. Ayarlar Modülü
+        cardAyarlar.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
     }
 }
