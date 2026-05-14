@@ -5,19 +5,31 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.List;
 
+/**
+ * Hocam Merhaba,
+ * Clarus projemizde veri yönetimini SQLiteOpenHelper ile mimari bir yapıya kavuşturduk.
+ * Versiyon 6 ile 'Kelime Öğren' modülü için telaffuz (okunuş) ve örnek cümle
+ * alanlarını entegre ettik. 5000+ veri için Transaction mimarisini kurduk.
+ */
 public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     private static final String VERITABANI_ADI = "KelimeAtolyesi.db";
-    private static final int VERITABANI_VERSIYON = 3; // Seviye ve Tarih için versiyonu yükselttik
+    // Versiyon 6: Okunuş ve Örnek Cümle sütunları eklendi.
+    private static final int VERITABANI_VERSIYON = 6;
 
+    // Kelimeler Tablosu
     private static final String TABLO_KELIMELER = "kelimeler";
     private static final String COL_ID = "id";
     private static final String COL_INGILIZCE = "ingilizce";
     private static final String COL_TURKCE = "turkce";
+    private static final String COL_OKUNUS = "okunus";       // Yeni eklenen
+    private static final String COL_ORNEK = "ornek_cumle";   // Yeni eklenen
     private static final String COL_SEVIYE = "seviye";
     private static final String COL_SON_TEKRAR = "son_tekrar_tarihi";
 
+    // Kullanıcılar Tablosu
     private static final String TABLO_KULLANICILAR = "kullanicilar";
     private static final String COL_USER_ID = "id";
     private static final String COL_EPOSTA = "eposta";
@@ -30,10 +42,13 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Kelime tablosu: Okunuş ve Örnek Cümle alanları dahil edildi.
         String tabloKelimeOlustur = "CREATE TABLE " + TABLO_KELIMELER + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_INGILIZCE + " TEXT, " +
                 COL_TURKCE + " TEXT, " +
+                COL_OKUNUS + " TEXT, " +
+                COL_ORNEK + " TEXT, " +
                 COL_SEVIYE + " INTEGER DEFAULT 0, " +
                 COL_SON_TEKRAR + " LONG DEFAULT 0)";
         db.execSQL(tabloKelimeOlustur);
@@ -48,9 +63,29 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Sema kanki, yapı değiştiği için eski tabloları uçurup temiz kurulum yapıyoruz.
         db.execSQL("DROP TABLE IF EXISTS " + TABLO_KELIMELER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLO_KULLANICILAR);
         onCreate(db);
+    }
+
+    // --- 5000 KELİME İÇİN OPTİMİZE EDİLMİŞ TOPLU EKLEME ---
+    public void topluKelimeEkle(List<KelimeModel> kelimeListesi) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction(); // Performans için işlemi başlatıyoruz
+        try {
+            for (KelimeModel k : kelimeListesi) {
+                ContentValues cv = new ContentValues();
+                cv.put(COL_INGILIZCE, k.getIngilizce().trim().toLowerCase());
+                cv.put(COL_TURKCE, k.getTurkce().trim().toLowerCase());
+                cv.put(COL_OKUNUS, k.getOkunus());
+                cv.put(COL_ORNEK, k.getOrnekCumle());
+                db.insert(TABLO_KELIMELER, null, cv);
+            }
+            db.setTransactionSuccessful(); // Tüm veriler başarıyla hazırlandıysa onayla
+        } finally {
+            db.endTransaction(); // İşlemi bitir
+        }
     }
 
     // Wordle için rastgele kelime seçen metot
@@ -67,12 +102,33 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
         return kelime;
     }
 
-    public boolean kelimeEkle(String ing, String tr) {
+    // Rapor ekranı için genel başarı yüzdesini hesaplar
+    public int getGenelBasariYuzdesi() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursorToplam = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER, null);
+        Cursor cursorOgrenilen = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER + " WHERE " + COL_SEVIYE + " > 1", null);
+
+        int toplam = 0, ogrenilen = 0;
+        if (cursorToplam.moveToFirst()) toplam = cursorToplam.getInt(0);
+        if (cursorOgrenilen.moveToFirst()) ogrenilen = cursorOgrenilen.getInt(0);
+
+        cursorToplam.close();
+        cursorOgrenilen.close();
+
+        return (toplam == 0) ? 0 : (ogrenilen * 100) / toplam;
+    }
+
+    // Kullanıcı profilini günceller (SettingsActivity için)
+    public void kullaniciGuncelle(String kadi, String sifre) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_INGILIZCE, ing.trim().toLowerCase());
-        cv.put(COL_TURKCE, tr.trim().toLowerCase());
-        return db.insert(TABLO_KELIMELER, null, cv) != -1;
+        if (!kadi.isEmpty()) cv.put(COL_KADI, kadi.trim());
+        if (!sifre.isEmpty()) cv.put(COL_SIFRE, sifre);
+
+        if (cv.size() > 0) {
+            db.update(TABLO_KULLANICILAR, cv, null, null);
+        }
+        db.close();
     }
 
     public boolean kullaniciKaydet(String eposta, String kadi, String sifre) {

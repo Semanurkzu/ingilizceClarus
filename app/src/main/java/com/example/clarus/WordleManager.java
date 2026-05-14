@@ -1,41 +1,45 @@
 package com.example.clarus;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Hocam Merhaba,
+ * Wordle algoritmasını karakter frekanslarını dikkate alacak şekilde güncelledik.
+ * Bu sayede mükerrer harf tahminlerinde (örneğin kelimede tek 'E' varken
+ * iki 'E' girilmesi) hatalı 'Sarı' uyarısı verilmesinin önüne geçtik.
+ */
 public class WordleManager {
 
-    // Harf durumları için sabitler
-    public static final int GRI = 0;   // Kelimede yok
-    public static final int SARI = 1;  // Kelimede var ama yanlış yer
-    public static final int YESIL = 2; // Doğru harf doğru yer
+    public static final int RENK_GRI = 0;   // Harf kelimede hiç yok
+    public static final int RENK_SARI = 1;  // Harf var ama yeri yanlış
+    public static final int RENK_YESIL = 2; // Harf ve yeri doğru
 
-    public static int[] kontrolEt(String tahmin, String gizliKelime) {
+    public static int[] kontrolEt(String tahmin, String gizli) {
         int[] sonuclar = new int[5];
-        tahmin = tahmin.toUpperCase();
-        gizliKelime = gizliKelime.toUpperCase();
+        boolean[] gizliKullanildi = new boolean[5];
+        boolean[] tahminKullanildi = new boolean[5];
 
-        // Önce yeşilleri (tam doğru yerleri) bulalım
+        // 1. Adım: Önce tam eşleşenleri (Yeşil) bul
         for (int i = 0; i < 5; i++) {
-            if (tahmin.charAt(i) == gizliKelime.charAt(i)) {
-                sonuclar[i] = YESIL;
-            } else {
-                sonuclar[i] = GRI;
+            if (tahmin.charAt(i) == gizli.charAt(i)) {
+                sonuclar[i] = RENK_YESIL;
+                gizliKullanildi[i] = true;
+                tahminKullanildi[i] = true;
             }
         }
 
-        // Sonra sarıları (yanlış yerdeki harfleri) bulalım
+        // 2. Adım: Kalan harfler içinde var olanları (Sarı) bul
         for (int i = 0; i < 5; i++) {
-            if (sonuclar[i] != YESIL) {
-                for (int j = 0; j < 5; j++) {
-                    // Eğer harf kelimenin başka bir yerinde varsa sarı yap
-                    if (tahmin.charAt(i) == gizliKelime.charAt(j)) {
-                        sonuclar[i] = SARI;
-                        break;
-                    }
+            if (tahminKullanildi[i]) continue;
+
+            for (int j = 0; j < 5; j++) {
+                if (!gizliKullanildi[j] && tahmin.charAt(i) == gizli.charAt(j)) {
+                    sonuclar[i] = RENK_SARI;
+                    gizliKullanildi[j] = true;
+                    break;
                 }
             }
         }
+
+        // Geri kalanlar varsayılan olarak RENK_GRI (0) kalır
         return sonuclar;
     }
 }

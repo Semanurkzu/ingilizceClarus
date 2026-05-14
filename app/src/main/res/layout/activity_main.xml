@@ -1,178 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:orientation="vertical"
+    android:background="#FDEFF2"
+    android:padding="20dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="Clarus"
+        android:textColor="#7D2039"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CLARUS"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- 1. SATIR: Kelime Ekle ve Wordle -->
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:columnCount="2"
+            android:alignmentMode="alignMargins">
 
+            <!-- Kelime Ekleme Kartı -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_kelime_ekle"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_input_add"
+                        app:tint="#A62B4B"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Kelime Ekle"
-                        android:textStyle="bold"/>
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_wordle"
-                android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="#538D4E"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="WORDLE"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-        <!-- 2. SATIR: Sınav ve Analiz (Java'daki hata için eklendi) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
+            <!-- Sınav Modülü -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_sinav"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        app:tint="#A62B4B"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sınav"
-                        android:textStyle="bold"/>
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Analiz Raporu -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_analiz"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        app:tint="#A62B4B"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Analiz"
-                        android:textStyle="bold"/>
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-        </LinearLayout>
 
-        <!-- 3. SATIR: LLM (Gemini) ve Ayarlar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
+            <!-- Wordle Modülü -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_llm"
+                android:id="@+id/card_wordle"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        app:tint="#A62B4B"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hikaye (AI)"
-                        android:textStyle="bold"/>
+                        android:text="Wordle"
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- LLM (Yapay Zeka) Modülü -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_ayarlar"
+                android:id="@+id/card_llm"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp"
-                android:layout_margin="8dp">
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_menu_info_details"
+                        app:tint="#A62B4B"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yapay Zeka"
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Ayarlar Modülü -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_ayarlar"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@android:drawable/ic_menu_preferences"
+                        app:tint="#A62B4B"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ayarlar"
-                        android:textStyle="bold"/>
+                        android:textColor="#7D2039"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-        </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+        </GridLayout>
+    </ScrollView>
+</LinearLayout>

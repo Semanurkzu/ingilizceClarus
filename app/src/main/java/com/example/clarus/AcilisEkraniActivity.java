@@ -1,4 +1,4 @@
-package com.example.clarus; // Kendi paket adınla kontrol et
+package com.example.clarus;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,41 +8,43 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Hocam Merhaba,
- * Bu sınıf uygulamamızın ilk giriş noktasıdır.
- * Nesne yönelimli programlama prensiplerine uygun olarak,
- * her işi kendi metodunda (Single Responsibility) yapacak şekilde kurguladık.
+ * Bu sınıf Clarus projemizin Entry Point (Giriş Noktası) katmanıdır.
+ * Uygulama yaşam döngüsünü (Lifecycle) optimize etmek ve kullanıcı deneyimini (UX)
+ * artırmak için Splash Screen tasarımını burada yönetiyoruz.
  */
 public class AcilisEkraniActivity extends AppCompatActivity {
 
-    // 80/20 kuralı: Uygulamanın en kritik ilk 3 saniyesi.
-    // Code Smell: 'Magic Number' kullanımından kaçınmak için süreyi sabitledik.
-    private static final int GECIKME_SURESI = 3000;
+    // Hocam, Splash ekran süresini 3 saniye (3000ms) olarak sabitledik.
+    // 'Magic Number' antipattern'inden kaçınmak için sabit (constant) kullandık.
+    private static final int SPLASH_SURESI = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acilis_ekrani);
 
-        // Hocam, ana akış mantığını onCreate içinde boğmamak için metodize ettik.
-        anaEkranaYonlendir();
+        // Uygulama akışını (Navigation Flow) yöneten metodu çağırıyoruz.
+        kullaniciyiYonlendir();
     }
 
     /**
-     * Kullanıcıyı 3 saniye bekletip ana ekrana aktaran metot.
-     * Handler nesnesini ana thread (Looper.getMainLooper) ile bağlayarak
-     * olası bellek sızıntılarının (Memory Leak) önüne geçtik.
+     * Kullanıcıyı belirlenen süre sonunda Kimlik Doğrulama (Authentication)
+     * ekranına yönlendiren metot.
      */
-    private void anaEkranaYonlendir() {
+    private void kullaniciyiYonlendir() {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                // MainActivity sınıfına geçiş emri veriyoruz.
-                Intent gecisIntent = new Intent(AcilisEkraniActivity.this, MainActivity.class);
-                startActivity(gecisIntent);
+                /*
+                 * Sema, burası çok kritik!
+                 * Artık direkt MainActivity'ye değil, Giriş Yap ekranına gidiyoruz.
+                 */
+                Intent intent = new Intent(AcilisEkraniActivity.this, GirisYapActivity.class);
+                startActivity(intent);
 
-                // finish() metodu çok kritik; arkada gereksiz activity tutmuyoruz (Resource Management).
+                // Resource Management: Splash ekranını stack'ten temizleyerek bellek tasarrufu sağlıyoruz.
                 finish();
             }
-        }, GECIKME_SURESI);
+        }, SPLASH_SURESI);
     }
 }

@@ -6,7 +6,21 @@
     android:background="#121213"
     android:padding="10dp">
 
-    <!-- Dinamik Oyun Izgarası -->
+    <!-- Üst Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clarus Wordle"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- Oyun Izgarası (5x6 Kutucuklar Buraya Gelecek) -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -20,23 +34,20 @@
             android:paddingTop="20dp"/>
     </ScrollView>
 
-    <!-- Mesaj Alanı (Tebrikler vb.) -->
+    <!-- Durum Mesajı -->
     <TextView
         android:id="@+id/tvGameStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:layout_marginBottom="10dp"/>
 
-    <!-- Klavyeyi buraya Java ile dinamik ekleyeceğiz -->
+    <!-- Standart Klavye Konteynırı -->
     <LinearLayout
         android:id="@+id/llKeyboardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp"/>
-
+        android:orientation="vertical"/>
 </LinearLayout>

@@ -4,8 +4,8 @@ plugins {
 
 android {
     namespace = "com.example.clarus"
+    compileSdk = 36
     // CompileSdk genelde tam sayı olarak verilir, 34 veya 35 idealdir.
-    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.clarus"

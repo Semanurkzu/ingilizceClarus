@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- İZİNLER BURADA OLMALI (application etiketinin dışında) -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,36 +10,60 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Clarus">
+        android:theme="@style/Theme.Clarus"
+        tools:targetApi="31">
 
-        <!-- Story 3: Ana Sınav Ekranı -->
+        <!-- 1. GİRİŞ NOKTASI (SPLASH EKRANI) -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".AcilisEkraniActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Story 4: Ayarlar Ekranı -->
+        <!-- 2. KİMLİK DOĞRULAMA MODÜLLERİ -->
         <activity
-            android:name=".SettingsActivity"
+            android:name=".GirisYapActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".KayitOlActivity"
             android:exported="false" />
 
-        <!-- Story 5: Analiz ve Rapor Ekranı -->
+        <!-- 3. ANA KONTROL MERKEZİ -->
         <activity
-            android:name=".ReportActivity"
+            android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- Story 6: Wordle Oyun Ekranı -->
+        <!-- 4. SENİN GELİŞTİRDİĞİN MODÜL -->
+        <activity
+            android:name=".KelimeEkleActivity"
+            android:exported="false" />
+
+
+
+        <!-- Yapay Zeka / Hikaye Modülü -->
+        <activity
+            android:name=".StoryChainActivity"
+            android:exported="false" />
+
+        <!-- Oyunlaştırma / Wordle Modülü -->
         <activity
             android:name=".WordleActivity"
             android:exported="false" />
 
-        <!-- Story 7: Word Chain Ekranı -->
+        <!-- Analiz / Rapor Modülü -->
         <activity
-            android:name=".StoryChainActivity"
+            android:name=".ReportActivity"
+            android:exported="false" />
+
+        <!-- Ayarlar Modülü -->
+        <activity
+            android:name=".SettingsActivity"
             android:exported="false" />
 
     </application>
