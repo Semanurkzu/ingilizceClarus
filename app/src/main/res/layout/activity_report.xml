@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="#FDEFF2">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +14,8 @@
         android:text="Öğrenme Raporu"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:textColor="#7D2039" />
 
     <!-- Başarı Oranı Alanı -->
     <TextView
@@ -22,13 +24,45 @@
         android:layout_height="wrap_content"
         android:text="Başarı Oranı: %0"
         android:textSize="18sp"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="20dp" />
+
+    <!-- Başlangıç Seviyesi İlerleme Çubuğu -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Başlangıç Seviyesi"
+        android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/pbBaslangic"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:max="100" />
+
+    <!-- Orta Seviye İlerleme Çubuğu -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Orta Seviye"
+        android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/pbOrta"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:max="100" />
 
     <!-- Yazdır/PDF Kaydet Butonu -->
     <Button
         android:id="@+id/btnYazdir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Raporu Yazdır (PDF)" />
+        android:text="Raporu Yazdır (PDF)"
+        android:backgroundTint="#A62B4B"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

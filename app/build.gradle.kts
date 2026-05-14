@@ -42,6 +42,7 @@ dependencies {
     // Story 7: Gemini AI ve Asenkron işlemler için gerekli kütüphaneler
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("com.google.guava:guava:33.2.1-android")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

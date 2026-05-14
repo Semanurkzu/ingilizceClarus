@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FDEFF2"
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clarus'a Hoş Geldin"
+        android:textColor="#7D2039"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="40dp"/>
+
+    <EditText
+        android:id="@+id/etKullaniciAdi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Kullanıcı Adı"
+        android:background="@android:color/white"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/etSifre"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Şifre"
+        android:inputType="textPassword"
+        android:background="@android:color/white"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/btnGiris"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Giriş Yap"
+        android:backgroundTint="#A62B4B"
+        android:textColor="#FFFFFF"/>
+
+    <TextView
+        android:id="@+id/tvKayitOl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hesabın yok mu? Kayıt Ol"
+        android:textColor="#7D2039"
+        android:layout_marginTop="20dp"
+        android:textStyle="italic"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

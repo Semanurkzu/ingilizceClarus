@@ -12,7 +12,7 @@ import android.widget.Toast;
 /**
  * Hocam Merhaba,
  * SettingsActivity üzerinde hem SharedPreferences ile uygulama tercihlerini
- * hem de SQLite ile kullanıcı profil verilerini yönetiyoruz.
+ * hem de SQLite (Versiyon 6) ile kullanıcı profil verilerini senkronize yönetiyoruz.
  */
 public class SettingsActivity extends AppCompatActivity {
 
@@ -37,25 +37,28 @@ public class SettingsActivity extends AppCompatActivity {
         switchDarkMode = findViewById(R.id.switchDarkMode);
         btnKaydet = findViewById(R.id.btnKaydet);
 
-        // Kayıtlı Ayarları Yükle
-        int mevcutLimit = preferences.getInt("kelime_limiti", 10);
-        boolean isDarkMode = preferences.getBoolean("dark_mode", false);
+        // Mevcut Ayarları Arayüze Yükle
+        yükleMevcutAyarlar();
 
-        etKelimeSayisi.setText(String.valueOf(mevcutLimit));
-        switchDarkMode.setChecked(isDarkMode);
-
-        // Karanlık Mod Değişimi
+        // Karanlık Mod Dinleyicisi
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-            // Seçimi kaydet
             preferences.edit().putBoolean("dark_mode", isChecked).apply();
         });
 
         btnKaydet.setOnClickListener(v -> ayarlariKaydet());
+    }
+
+    private void yükleMevcutAyarlar() {
+        int mevcutLimit = preferences.getInt("kelime_limiti", 10);
+        boolean isDarkMode = preferences.getBoolean("dark_mode", false);
+
+        etKelimeSayisi.setText(String.valueOf(mevcutLimit));
+        switchDarkMode.setChecked(isDarkMode);
     }
 
     private void ayarlariKaydet() {
@@ -63,20 +66,18 @@ public class SettingsActivity extends AppCompatActivity {
         String kadi = etYeniKadi.getText().toString().trim();
         String sifre = etYeniSifre.getText().toString().trim();
 
-        // 1. SharedPreferences Güncelleme
-        SharedPreferences.Editor editor = preferences.edit();
+        // 1. Uygulama Tercihlerini (Limit vb.) Kaydet
         if (!limitStr.isEmpty()) {
-            editor.putInt("kelime_limiti", Integer.parseInt(limitStr));
+            preferences.edit().putInt("kelime_limiti", Integer.parseInt(limitStr)).apply();
         }
-        editor.apply();
 
-        // 2. Veritabanı (SQLite) Profil Güncelleme
+        // 2. Veritabanı (SQLite) Profil Güncelleme (Versiyon 6 Uyumu)
         if (!kadi.isEmpty() || !sifre.isEmpty()) {
+            // Veritabanı sınıfındaki kullaniciGuncelle metodunu tetikler
             vt.kullaniciGuncelle(kadi, sifre);
-            Toast.makeText(this, "Profil bilgileri güncellendi", Toast.LENGTH_SHORT).show();
         }
 
-        Toast.makeText(this, "Tüm değişiklikler başarıyla uygulandı ✨", Toast.LENGTH_SHORT).show();
-        finish();
+        Toast.makeText(this, "Değişiklikler başarıyla uygulandı ✨", Toast.LENGTH_SHORT).show();
+        finish(); // Ayarlar yapıldıktan sonra bir önceki ekrana (Main) döner
     }
 }

@@ -7,15 +7,36 @@
     android:background="#FDEFF2"
     android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Üst Bar: Başlık ve Kelime Öğren Butonu -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clarus"
-        android:textColor="#7D2039"
-        android:textSize="28sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Clarus"
+            android:textColor="#7D2039"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnKelimeOgrenMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KELİME ÖĞREN"
+            android:backgroundTint="#A62B4B"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"

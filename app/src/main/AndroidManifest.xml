@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -39,12 +39,15 @@
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- 4. SENİN GELİŞTİRDİĞİN MODÜL -->
+        <!-- 4. SENİN GELİŞTİRDİĞİN MODÜLLER -->
         <activity
             android:name=".KelimeEkleActivity"
             android:exported="false" />
 
-
+        <!-- İŞTE BURASI! UYGULAMANIN ÇÖKMESİNİ ENGELLEYEN YENİ KAYIT -->
+        <activity
+            android:name=".KelimeOgrenActivity"
+            android:exported="false" />
 
         <!-- Yapay Zeka / Hikaye Modülü -->
         <activity

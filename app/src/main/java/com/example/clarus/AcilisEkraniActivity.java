@@ -1,6 +1,7 @@
 package com.example.clarus;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,10 +19,20 @@ public class AcilisEkraniActivity extends AppCompatActivity {
     // 'Magic Number' antipattern'inden kaçınmak için sabit (constant) kullandık.
     private static final int SPLASH_SURESI = 3000;
 
+    private VeritabaniYardimcisi vt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acilis_ekrani);
+
+        // 1. Veritabanı yardımcısını başlatıyoruz
+        vt = new VeritabaniYardimcisi(this);
+
+        // 2. VERİTABANINI ÇALIŞTIRMA KODU (Tablolar burada oluşur)
+        // getWritableDatabase() çağrıldığı an SQLite veritabanı dosyası oluşur ve ayağa kalkar.
+        SQLiteDatabase db = vt.getWritableDatabase();
+        db.close(); // Bellek sızıntısı olmaması için tetikledikten sonra kapatıyoruz.
 
         // Uygulama akışını (Navigation Flow) yöneten metodu çağırıyoruz.
         kullaniciyiYonlendir();

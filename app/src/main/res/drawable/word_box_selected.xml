@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Kutucuğun iç rengi (beyaz kalsın) -->
+    <solid android:color="#FFFFFF" />
+
+    <!-- Seçili olduğunu belli etmek için kenarlığı kalınlaştırıyoruz ve belirgin bir renk veriyoruz -->
+    <stroke
+        android:width="3dp"
+        android:color="#A62B4B" /> <!-- Clarus temasına uygun daha koyu bir kırmızı -->
+
+    <!-- Köşe yuvarlaklığı (word_box.xml ile aynı olmalı) -->
+    <corners android:radius="8dp" />
+</shape>

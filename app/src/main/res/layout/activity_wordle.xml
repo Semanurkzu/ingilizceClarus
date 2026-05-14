@@ -3,51 +3,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#121213"
-    android:padding="10dp">
+    android:background="#FDEFF2"
+    android:padding="16dp">
 
     <!-- Üst Bar -->
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clarus Wordle"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+        android:text="Clarus Wordle"
+        android:textColor="#7D2039"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="10dp" />
 
-    <!-- Oyun Izgarası (5x6 Kutucuklar Buraya Gelecek) -->
+    <!-- Oyun Durumu (Kalan Hak vb.) -->
+    <TextView
+        android:id="@+id/tvGameStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#A62B4B"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Oyun Tahtası (Kutuların Alt Alta Ekleneceği Yer) -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <LinearLayout
             android:id="@+id/llGameBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="20dp"/>
+            android:paddingTop="10dp"/>
+
     </ScrollView>
 
-    <!-- Durum Mesajı -->
-    <TextView
-        android:id="@+id/tvGameStatus"
+    <!-- Kullanıcı Giriş Alanı (Yazmalı Kısım) -->
+    <EditText
+        android:id="@+id/etTahmin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
+        android:layout_height="60dp"
+        android:hint="5 HARFLİ KELİME"
+        android:textColor="#7D2039"
+        android:textColorHint="#888888"
+        android:maxLength="5"
+        android:inputType="textCapCharacters"
         android:gravity="center"
-        android:textSize="18sp"
+        android:backgroundTint="#7D2039"
+        android:textSize="20sp"
         android:layout_marginBottom="10dp"/>
 
-    <!-- Standart Klavye Konteynırı -->
-    <LinearLayout
-        android:id="@+id/llKeyboardContainer"
+    <Button
+        android:id="@+id/btnTahminEt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:layout_height="60dp"
+        android:text="TAHMİN ET"
+        android:backgroundTint="#A62B4B"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
 </LinearLayout>
