@@ -2,4 +2,12 @@
 <resources>
     <item name="etTahmin" type="id" />
     <item name="btnTahminEt" type="id" />
+    <item name="tvOgrenilenSayi" type="id" />
+    <item name="et_word1" type="id" />
+    <item name="et_word2" type="id" />
+    <item name="et_word3" type="id" />
+    <item name="et_word4" type="id" />
+    <item name="et_word5" type="id" />
+    <item name="btn_create_story" type="id" />
+    <item name="tv_story_result" type="id" />
 </resources>

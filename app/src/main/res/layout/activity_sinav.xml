@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#F5F5F5"
+    android:gravity="center">
+
+    <!-- Skor ve İlerleme Durumu -->
+    <TextView
+        android:id="@+id/tvSkor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Doğru: 0 | Yanlış: 0"
+        android:textColor="#333333"
+        android:textSize="18sp"
+        android:layout_marginBottom="30dp" />
+
+    <!-- Soru Kartı -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="40dp"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/tvSoru"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="ABOLISH"
+            android:textColor="#2196F3"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Seçenekler Buton Grubu -->
+    <Button
+        android:id="@+id/btnA"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="cevapVer"
+        android:text="A Seçeneği"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnB"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="cevapVer"
+        android:text="B Seçeneği"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnC"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="cevapVer"
+        android:text="C Seçeneği"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnD"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="cevapVer"
+        android:text="D Seçeneği"
+        android:textAllCaps="false" />
+
+</LinearLayout>

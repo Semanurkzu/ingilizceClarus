@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
+    xmlns:tools="http://schemas.android.com/tools"> <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +13,6 @@
         android:theme="@style/Theme.Clarus"
         tools:targetApi="31">
 
-        <!-- 1. GİRİŞ NOKTASI (SPLASH EKRANI) -->
         <activity
             android:name=".AcilisEkraniActivity"
             android:exported="true"
@@ -24,7 +23,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 2. KİMLİK DOĞRULAMA MODÜLLERİ -->
         <activity
             android:name=".GirisYapActivity"
             android:exported="false"
@@ -34,40 +32,61 @@
             android:name=".KayitOlActivity"
             android:exported="false" />
 
-        <!-- 3. ANA KONTROL MERKEZİ -->
+        <activity
+            android:name=".SifremiUnuttumActivity"
+            android:exported="true">
+
+            <intent-filter android:label="Şifre Sıfırlama">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="clarus" android:host="resetpassword" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="clarus.example.com" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- 4. SENİN GELİŞTİRDİĞİN MODÜLLER -->
         <activity
             android:name=".KelimeEkleActivity"
             android:exported="false" />
 
-        <!-- İŞTE BURASI! UYGULAMANIN ÇÖKMESİNİ ENGELLEYEN YENİ KAYIT -->
         <activity
             android:name=".KelimeOgrenActivity"
             android:exported="false" />
 
-        <!-- Yapay Zeka / Hikaye Modülü -->
+        <activity
+            android:name=".SinavActivity"
+            android:exported="false"
+            android:label="Kelime Sınavı" />
+
         <activity
             android:name=".StoryChainActivity"
             android:exported="false" />
 
-        <!-- Oyunlaştırma / Wordle Modülü -->
         <activity
             android:name=".WordleActivity"
             android:exported="false" />
 
-        <!-- Analiz / Rapor Modülü -->
         <activity
             android:name=".ReportActivity"
             android:exported="false" />
 
-        <!-- Ayarlar Modülü -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
+
+
 
     </application>
 

@@ -1,17 +1,22 @@
 package com.example.clarus;
 
-/**
- * Hocam Merhaba,
- * 5000 kelimelik veriyi hafızada verimli yönetmek için bu model sınıfını oluşturduk.
- * Veritabanı (Versiyon 6) ile tam uyumlu alanlara sahiptir.
- */
 public class KelimeModel {
+    private int id; // BU EKSİKTİ!
     private String ingilizce;
     private String turkce;
     private String okunus;
     private String ornekCumle;
 
-    // Constructor (Yapıcı Metot)
+    // Hem ID'li hem ID'siz constructor (kurucu metot) ekliyoruz
+    public KelimeModel(int id, String ingilizce, String turkce, String okunus, String ornekCumle) {
+        this.id = id;
+        this.ingilizce = ingilizce;
+        this.turkce = turkce;
+        this.okunus = okunus;
+        this.ornekCumle = ornekCumle;
+    }
+
+    // Mevcut constructor'ı bozmuyoruz (Hata vermemesi için)
     public KelimeModel(String ingilizce, String turkce, String okunus, String ornekCumle) {
         this.ingilizce = ingilizce;
         this.turkce = turkce;
@@ -19,7 +24,10 @@ public class KelimeModel {
         this.ornekCumle = ornekCumle;
     }
 
-    // Getter Metotları (Veritabanına kaydederken kullanacağız)
+    // --- KRİTİK GETTER VE SETTER METOTLARI ---
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; } // İŞTEimage_84f4c2.jpg'DEKİ HATAYI ÇÖZEN SATIR!
+
     public String getIngilizce() { return ingilizce; }
     public String getTurkce() { return turkce; }
     public String getOkunus() { return okunus; }

@@ -1,16 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
     namespace = "com.example.clarus"
-    compileSdk = 36
-    // CompileSdk genelde tam sayı olarak verilir, 34 veya 35 idealdir.
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.clarus"
-        // Story 7'deki getMainExecutor() hatasını çözmek için minSdk 28 yapıldı
-        minSdk = 28
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -34,15 +33,19 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
+    // 💥 ESKİ LİBS REFERANSLARINI SİLİP YERLERİNE EN GÜNCEL VE KARARLI SÜRÜMLERİ ZORLA YAZDIK
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.activity:activity:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    // Story 7: Gemini AI ve Asenkron işlemler için gerekli kütüphaneler
-    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
-    implementation("com.google.guava:guava:33.2.1-android")
+    // Ağ istekleri ve JSON işlemleri için sorunsuz kütüphanelerimiz
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.firebase.auth)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

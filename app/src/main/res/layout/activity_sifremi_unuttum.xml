@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Şifremi Unuttum"
+            android:textColor="#800020"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="32dp"/>
+
+        <LinearLayout
+            android:id="@+id/layout_step1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kayıtlı e-posta adresinizi girin. Size şifre sıfırlama bağlantısı göndereceğiz."
+                android:textColor="#555555"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/et_forgot_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="E-posta Adresiniz"
+                android:inputType="textEmailAddress"
+                android:background="@android:drawable/edit_text"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:layout_marginBottom="24dp"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_send_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Sıfırlama Linki Gönder"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#800020"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_step2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lütfen hesabınız için yeni bir şifre belirleyin."
+                android:textColor="#555555"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/et_new_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Yeni Şifre"
+                android:inputType="textPassword"
+                android:background="@android:drawable/edit_text"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:layout_marginBottom="16dp"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/et_new_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Yeni Şifre (Tekrar)"
+                android:inputType="textPassword"
+                android:background="@android:drawable/edit_text"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:layout_marginBottom="24dp"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_update_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Şifreyi Güncelle"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#800020"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

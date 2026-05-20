@@ -11,72 +11,100 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+// FIREBASE KÜTÜPHANELERİ
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Hocam Merhaba,
- * Giriş sistemini Veritabanı Versiyon 6 ile tam entegre hale getirdik.
- * SharedPreferences kullanarak 'Beni Hatırla' mekanizmasını devreye aldık.
+ * Giriş sistemini yerel veritabanından Firebase Authentication mimarisine taşıdık.
+ * Böylece kullanıcı kimlik doğrulama işlemlerini bulut tabanlı, güvenli ve
+ * gerçek zamanlı (Real-time) olarak yönetiyoruz.
  */
 public class GirisYapActivity extends AppCompatActivity {
 
-    private EditText etKullaniciAdi, etSifre;
+    private EditText etEposta, etSifre; // Kadi yerine eposta yapısı Firebase için daha uygundur
     private Button btnGiris;
-    private TextView tvKayitOl;
-    private VeritabaniYardimcisi vt;
+    private TextView tvKayitOl, tvSifremiUnuttum;
     private SharedPreferences sharedPreferences;
+
+    // Firebase Auth Nesnesi
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Önce oturum kontrolü: Kullanıcı daha önce girdi mi?
-        sharedPreferences = getSharedPreferences("ClarusLogin", Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("isLoggedIn", false)) {
-            gitMain();
-        }
-
         setContentView(R.layout.activity_giris_yap);
 
-        // Veritabanı bağlantısı
-        vt = new VeritabaniYardimcisi(this);
+        // Firebase Auth ve SharedPreferences başlatılıyor
+        mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = getSharedPreferences("GirisBilgileri", Context.MODE_PRIVATE);
 
-        // Görünümleri bağlama
-        etKullaniciAdi = findViewById(R.id.etKullaniciAdi);
+        // Arayüz bileşenlerinin eşlenmesi
+        // NOT: Eğer XML'de id hala etKullaniciAdi ise onu koruyabilirsin, koda etEposta olarak bağladık.
+        etEposta = findViewById(R.id.etKullaniciAdi);
         etSifre = findViewById(R.id.etSifre);
         btnGiris = findViewById(R.id.btnGiris);
         tvKayitOl = findViewById(R.id.tvKayitOl);
+        tvSifremiUnuttum = findViewById(R.id.tvSifremiUnuttum);
 
-        btnGiris.setOnClickListener(v -> {
-            String kadi = etKullaniciAdi.getText().toString().trim();
-            String sifre = etSifre.getText().toString().trim();
+        // 1. FIREBASE GİRİŞ YAP BUTON AKSİYONU
+        btnGiris.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eposta = etEposta.getText().toString().trim();
+                String sifre = etSifre.getText().toString().trim();
 
-            if (kadi.isEmpty() || sifre.isEmpty()) {
-                Toast.makeText(this, "Lütfen tüm alanları doldurun!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                if (eposta.isEmpty() || sifre.isEmpty()) {
+                    Toast.makeText(GirisYapActivity.this, "Lütfen tüm alanları doldurun!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            // Veritabanı kontrolü (Versiyon 6)
-            if (vt.girisKontrol(kadi, sifre)) {
-                // Oturum bilgilerini kaydet
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("isLoggedIn", true);
-                editor.putString("currentUsername", kadi);
-                editor.apply();
+                // FIREBASE AUTHENTICATION SORGUSU BAŞLIYOR
+                mAuth.signInWithEmailAndPassword(eposta, sifre)
+                        .addOnCompleteListener(GirisYapActivity.this, task -> {
+                            if (task.isSuccessful()) {
+                                // Giriş başarılı, Firebase kullanıcısını alıyoruz
+                                FirebaseUser user = mAuth.getCurrentUser();
 
-                Toast.makeText(this, "Hoş geldin, " + kadi + "!", Toast.LENGTH_SHORT).show();
-                gitMain();
-            } else {
-                Toast.makeText(this, "Kullanıcı adı veya şifre hatalı!", Toast.LENGTH_LONG).show();
+                                // Beni Hatırla mekanizması için SharedPreferences kaydı
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("isLoggedIn", true);
+                                if (user != null && user.getEmail() != null) {
+                                    editor.putString("kullaniciEposta", user.getEmail());
+                                }
+                                editor.apply();
+
+                                Toast.makeText(GirisYapActivity.this, "Giriş Başarılı!", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(GirisYapActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // Eğer giriş başarısız olursa Firebase'den gelen hata mesajını gösterir
+                                String hataMesaji = task.getException() != null ? task.getException().getMessage() : "Hatalı Giriş Bilgileri!";
+                                Toast.makeText(GirisYapActivity.this, "Hata: " + hataMesaji, Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
         });
 
-        tvKayitOl.setOnClickListener(v -> {
-            startActivity(new Intent(GirisYapActivity.this, KayitOlActivity.class));
+        // 2. KAYIT OL EKRANINA GEÇİŞ
+        tvKayitOl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GirisYapActivity.this, KayitOlActivity.class);
+                startActivity(intent);
+            }
         });
-    }
 
-    private void gitMain() {
-        Intent intent = new Intent(GirisYapActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Geri tuşuyla giriş ekranına dönülmesin
+        // 3. ŞİFREMİ UNUTTUM EKRANINA GEÇİŞ
+        tvSifremiUnuttum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GirisYapActivity.this, SifremiUnuttumActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

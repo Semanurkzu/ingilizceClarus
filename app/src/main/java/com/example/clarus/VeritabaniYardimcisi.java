@@ -6,20 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Hocam Merhaba,
- * Clarus projemizde veri yönetimini SQLiteOpenHelper ile mimari bir yapıya kavuşturduk.
- * Versiyon 6 ile 'Kelime Öğren' modülü için telaffuz (okunuş) ve örnek cümle
- * alanlarını entegre ettik. 5000+ veri için Transaction mimarisini kurduk.
- */
 public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     private static final String VERITABANI_ADI = "KelimeAtolyesi.db";
-    private static final int VERITABANI_VERSIYON = 6;
+    private static final int VERITABANI_VERSIYON = 7;
 
-    // Kelimeler Tablosu Sabitleri
     private static final String TABLO_KELIMELER = "kelimeler";
     private static final String COL_ID = "id";
     private static final String COL_INGILIZCE = "ingilizce";
@@ -29,7 +23,6 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
     private static final String COL_SEVIYE = "seviye";
     private static final String COL_SON_TEKRAR = "son_tekrar_tarihi";
 
-    // Kullanıcılar Tablosu Sabitleri
     private static final String TABLO_KULLANICILAR = "kullanicilar";
     private static final String COL_USER_ID = "id";
     private static final String COL_EPOSTA = "eposta";
@@ -62,12 +55,134 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLO_KELIMELER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLO_KULLANICILAR);
-        onCreate(db);
+        // Gelişmiş onUpgrade mantığı: Eğer tablolar yoksa oluşturur, varsa verileri silmez.
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLO_KELIMELER + " (" +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_INGILIZCE + " TEXT, " +
+                COL_TURKCE + " TEXT, " +
+                COL_OKUNUS + " TEXT, " +
+                COL_ORNEK + " TEXT, " +
+                COL_SEVIYE + " INTEGER DEFAULT 0, " +
+                COL_SON_TEKRAR + " LONG DEFAULT 0)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLO_KULLANICILAR + " (" +
+                COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_EPOSTA + " TEXT, " +
+                COL_KADI + " TEXT, " +
+                COL_SIFRE + " TEXT)");
     }
 
-    // --- 5000 KELİME İÇİN OPTİMİZE EDİLMİŞ TOPLU EKLEME ---
+    // 💥 ŞİFRE SIFIRLAMA İÇİN E-POSTA KONTROL METODU
+    public boolean epostaVarMi(String eposta) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLO_KULLANICILAR + " WHERE " + COL_EPOSTA + "=?", new String[]{eposta.trim()});
+        boolean varMi = c.getCount() > 0;
+        c.close();
+        return varMi;
+    }
+
+    // 💥 DERİN BAĞLANTIDAN (DEEP LINK) GELEN E-POSTAYA GÖRE ŞİFRE GÜNCELLEME METODU
+    public boolean sifreGuncelleEpostaIle(String eposta, String yeniSifre) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SIFRE, yeniSifre);
+
+        int rows = db.update(TABLO_KULLANICILAR, cv, COL_EPOSTA + "=?", new String[]{eposta.trim()});
+        return rows > 0;
+    }
+
+    // --- RAPOR EKRANI İÇİN DİNAMİK İSTATİSTİK METODU ---
+    public int[] getIstatistikler() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursorToplam = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER, null);
+        Cursor cursorOgrenilen = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER + " WHERE " + COL_SEVIYE + " > 0", null);
+        Cursor cursorUsta = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER + " WHERE " + COL_SEVIYE + " = 6", null);
+
+        int toplam = 0, ogrenilen = 0, usta = 0;
+
+        if (cursorToplam.moveToFirst()) toplam = cursorToplam.getInt(0);
+        if (cursorOgrenilen.moveToFirst()) ogrenilen = cursorOgrenilen.getInt(0);
+        if (cursorUsta.moveToFirst()) usta = cursorUsta.getInt(0);
+
+        cursorToplam.close();
+        cursorOgrenilen.close();
+        cursorUsta.close();
+
+        return new int[]{toplam, ogrenilen, usta};
+    }
+
+    // --- SINAV MODÜLÜ METOTLARI ---
+    public List<KelimeModel> tekrarKelimeleleriniGetir() {
+        List<KelimeModel> liste = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        long suan = System.currentTimeMillis();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLO_KELIMELER +
+                        " WHERE " + COL_SON_TEKRAR + " <= ? ORDER BY RANDOM() LIMIT 20",
+                new String[]{String.valueOf(suan)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                KelimeModel k = new KelimeModel(
+                        cursor.getInt(0),    // id
+                        cursor.getString(1), // eng
+                        cursor.getString(2), // tur
+                        cursor.getString(3), // phon
+                        cursor.getString(4)  // ex
+                );
+                liste.add(k);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return liste;
+    }
+
+    public void kelimeAsamasiniGuncelle(int id, boolean dogruMu) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_SEVIYE + " FROM " + TABLO_KELIMELER + " WHERE " + COL_ID + "=?", new String[]{String.valueOf(id)});
+        int mevcutSeviye = 0;
+        if (cursor.moveToFirst()) mevcutSeviye = cursor.getInt(0);
+        cursor.close();
+
+        int yeniSeviye;
+        long ekSure = 0;
+        long GUN = 24 * 60 * 60 * 1000L;
+
+        if (dogruMu) {
+            yeniSeviye = Math.min(mevcutSeviye + 1, 6);
+            switch (yeniSeviye) {
+                case 1: ekSure = GUN; break;
+                case 2: ekSure = 7 * GUN; break;
+                case 3: ekSure = 30 * GUN; break;
+                case 4: ekSure = 90 * GUN; break;
+                case 5: ekSure = 180 * GUN; break;
+                case 6: ekSure = 365 * GUN; break;
+            }
+        } else {
+            yeniSeviye = 0;
+            ekSure = GUN;
+        }
+
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SEVIYE, yeniSeviye);
+        cv.put(COL_SON_TEKRAR, System.currentTimeMillis() + ekSure);
+        db.update(TABLO_KELIMELER, cv, COL_ID + "=?", new String[]{String.valueOf(id)});
+    }
+
+    public List<String> rastgeleSikklarGetir(String dogruCevap) {
+        List<String> sikklar = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_TURKCE + " FROM " + TABLO_KELIMELER +
+                " WHERE " + COL_TURKCE + " != ? ORDER BY RANDOM() LIMIT 3", new String[]{dogruCevap});
+        if (cursor.moveToFirst()) {
+            do { sikklar.add(cursor.getString(0)); } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sikklar;
+    }
+
+    // --- DİĞER METOTLAR ---
     public void topluKelimeEkle(List<KelimeModel> kelimeListesi) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -81,93 +196,44 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
                 db.insert(TABLO_KELIMELER, null, cv);
             }
             db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
+        } finally { db.endTransaction(); }
     }
 
-    // --- KELİME ÖĞREN MODÜLÜ İÇİN EKLENEN METOT ---
     public KelimeModel rastgeleOgrenmeKelimesiGetir() {
         KelimeModel kelime = null;
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Rastgele 1 kelime ve tüm detaylarını seçiyoruz
-        Cursor cursor = db.rawQuery("SELECT " + COL_INGILIZCE + ", " + COL_TURKCE + ", " + COL_OKUNUS + ", " + COL_ORNEK + " FROM " + TABLO_KELIMELER + " ORDER BY RANDOM() LIMIT 1", null);
-
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLO_KELIMELER + " ORDER BY RANDOM() LIMIT 1", null);
         if (cursor.moveToFirst()) {
-            String eng = cursor.getString(0);
-            String tur = cursor.getString(1);
-            String phon = cursor.getString(2);
-            String ex = cursor.getString(3);
-
-            // Eğer null gelen veri varsa boş string yapıyoruz ki uygulama çökmesin
-            if (phon == null) phon = "";
-            if (ex == null) ex = "";
-
-            kelime = new KelimeModel(eng, tur, phon, ex);
+            kelime = new KelimeModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
         }
         cursor.close();
-        db.close();
-
         return kelime;
     }
 
-    // Wordle için rastgele kelime seçen metot (Dedektif Korumalı)
     public String getWordleKelime(int harfSayisi) {
-        String kelime = "CLARU"; // Bulamazsa yazacağı en son çare
+        String kelime = "CLARU";
         SQLiteDatabase db = this.getReadableDatabase();
-
         try {
-            // 1. ADIM: SQLite'ın harf sayma huyuna güvenmiyoruz. İçinde boşluk olmayan rastgele 100 kelime çekiyoruz.
-            Cursor cursor = db.rawQuery("SELECT ingilizce FROM kelimeler WHERE ingilizce IS NOT NULL AND ingilizce NOT LIKE '% %' ORDER BY RANDOM() LIMIT 100", null);
-
+            Cursor cursor = db.rawQuery("SELECT ingilizce FROM " + TABLO_KELIMELER + " WHERE ingilizce NOT LIKE '% %' ORDER BY RANDOM() LIMIT 100", null);
             while (cursor.moveToNext()) {
-                // 2. ADIM: Kelimeyi al, sağındaki solundaki tüm görünmez boşlukları Java'nın gücüyle temizle
                 String secilen = cursor.getString(0).trim().toUpperCase();
-
-                // 3. ADIM: Kontrolü Java'da yapıyoruz! Temizlenmiş hali tam 5 harf mi?
-                if (secilen.length() == harfSayisi) {
-                    kelime = secilen;
-                    Log.d("KelimeAtolyesi.db", "Sonunda 5 harfli kelime bulundu: " + kelime);
-                    break; // 5 harfliyi bulduğumuz an aramayı durdur ve kelimeyi gönder!
-                }
+                if (secilen.length() == harfSayisi) { kelime = secilen; break; }
             }
             cursor.close();
-
-        } catch (Exception e) {
-            Log.e("KelimeAtolyesi.db", "Arama Hatası: " + e.getMessage());
-        }
-
-        db.close();
-        return kelime; // Her şey yolundaysa taş gibi 5 harfli kelimen döner
+        } catch (Exception e) { Log.e("Hata", e.getMessage()); }
+        return kelime;
     }
 
-    // Rapor ekranı için başarı yüzdesi
-    public int getGenelBasariYuzdesi() {
+    // 💥 Geliştirilmiş Giriş Kontrolü: Kullanıcı hem kullanıcı adı hem de eposta ile giriş yapabilir!
+    public boolean girisKontrol(String kadiVeyaEposta, String sifre) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursorToplam = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER, null);
-        Cursor cursorOgrenilen = db.rawQuery("SELECT COUNT(*) FROM " + TABLO_KELIMELER + " WHERE " + COL_SEVIYE + " > 1", null);
-
-        int toplam = 0, ogrenilen = 0;
-        if (cursorToplam.moveToFirst()) toplam = cursorToplam.getInt(0);
-        if (cursorOgrenilen.moveToFirst()) ogrenilen = cursorOgrenilen.getInt(0);
-
-        cursorToplam.close();
-        cursorOgrenilen.close();
-
-        return (toplam == 0) ? 0 : (ogrenilen * 100) / toplam;
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLO_KULLANICILAR + " WHERE (" + COL_KADI + "=? OR " + COL_EPOSTA + "=?) AND " + COL_SIFRE + "=?",
+                new String[]{kadiVeyaEposta.trim(), kadiVeyaEposta.trim(), sifre});
+        boolean s = c.getCount() > 0;
+        c.close();
+        return s;
     }
 
-    // Giriş Kontrolü
-    public boolean girisKontrol(String kadi, String sifre) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLO_KULLANICILAR + " WHERE " + COL_KADI + "=? AND " + COL_SIFRE + "=?", new String[]{kadi, sifre});
-        boolean sonuc = cursor.getCount() > 0;
-        cursor.close();
-        return sonuc;
-    }
-
-    // Kayıt İşlemi
     public boolean kullaniciKaydet(String eposta, String kadi, String sifre) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -177,22 +243,19 @@ public class VeritabaniYardimcisi extends SQLiteOpenHelper {
         return db.insert(TABLO_KULLANICILAR, null, cv) != -1;
     }
 
-    // Tekli Kelime Ekleme
+    public void kullaniciGuncelle(String kadi, String yeniSifre) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SIFRE, yeniSifre);
+        db.update(TABLO_KULLANICILAR, cv, COL_KADI + "=?", new String[]{kadi});
+    }
+
+    // 💥 Boş bırakılan kelime ekleme metodu dolduruldu:
     public void kelimeEkle(String ingilizce, String turkce) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_INGILIZCE, ingilizce.trim().toLowerCase());
         cv.put(COL_TURKCE, turkce.trim().toLowerCase());
         db.insert(TABLO_KELIMELER, null, cv);
-        db.close();
-    }
-
-    // Kullanıcı Şifre Güncelleme
-    public void kullaniciGuncelle(String kadi, String yeniSifre) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(COL_SIFRE, yeniSifre);
-        db.update(TABLO_KULLANICILAR, cv, COL_KADI + "=?", new String[]{kadi});
-        db.close();
     }
 }

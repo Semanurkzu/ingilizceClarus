@@ -1,96 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.google.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDEFF2">
+    android:background="#FFF5F5"
+    android:padding="16dp"
+    tools:context=".StoryChainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
         android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Story Chain (AI)"
-            android:textColor="#7D2039"
-            android:textSize="28sp"
+            android:textColor="#800020"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- Kullanıcının kelimeleri gireceği alanlar -->
-        <EditText
-            android:id="@+id/etWord1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="1. Kelimeyi Yazın"
-            android:backgroundTint="#A62B4B"
-            android:textColor="#3A3A3C"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginVertical="16dp"/>
 
         <EditText
-            android:id="@+id/etWord2"
+            android:id="@+id/et_word1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="2. Kelimeyi Yazın"
-            android:backgroundTint="#A62B4B"
-            android:textColor="#3A3A3C"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:hint="1. Kelimeyi girin"
+            android:singleLine="true"
+            android:layout_marginBottom="12dp"/>
 
         <EditText
-            android:id="@+id/etWord3"
+            android:id="@+id/et_word2"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="3. Kelimeyi Yazın"
-            android:backgroundTint="#A62B4B"
-            android:textColor="#3A3A3C"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:hint="2. Kelimeyi girin"
+            android:singleLine="true"
+            android:layout_marginBottom="12dp"/>
 
         <EditText
-            android:id="@+id/etWord4"
+            android:id="@+id/et_word3"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="4. Kelimeyi Yazın"
-            android:backgroundTint="#A62B4B"
-            android:textColor="#3A3A3C"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:hint="3. Kelimeyi girin"
+            android:singleLine="true"
+            android:layout_marginBottom="12dp"/>
 
         <EditText
-            android:id="@+id/etWord5"
+            android:id="@+id/et_word4"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="5. Kelimeyi Yazın"
-            android:backgroundTint="#A62B4B"
-            android:textColor="#3A3A3C"
+            android:layout_height="wrap_content"
+            android:hint="4. Kelimeyi girin"
+            android:singleLine="true"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/et_word5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="5. Kelimeyi girin"
+            android:singleLine="true"
             android:layout_marginBottom="20dp"/>
 
         <Button
-            android:id="@+id/btnOlustur"
+            android:id="@+id/btn_create_story"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:text="HİKAYE VE GÖRSEL OLUŞTUR"
-            android:backgroundTint="#7D2039"
+            android:backgroundTint="#800020"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
             android:textStyle="bold"
+            android:padding="12dp"
             android:layout_marginBottom="20dp"/>
 
         <TextView
-            android:id="@+id/tvHikaye"
+            android:id="@+id/tv_story_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3A3A3C"
+            android:text=""
+            android:textColor="#333333"
             android:textSize="16sp"
-            android:layout_marginBottom="20dp"/>
+            android:lineSpacingMultiplier="1.2"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
 
         <ImageView
-            android:id="@+id/ivGorsel"
+            android:id="@+id/iv_generated_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="20dp"/>
+            android:layout_height="250dp"
+            android:layout_marginBottom="24dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 </ScrollView>

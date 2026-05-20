@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Öğrenme Raporu"
-        android:textSize="22sp"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="25dp"
         android:textColor="#7D2039" />
 
     <!-- Başarı Oranı Alanı -->
@@ -22,16 +22,48 @@
         android:id="@+id/tvBasariOrani"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Başarı Oranı: %0"
-        android:textSize="18sp"
-        android:layout_marginBottom="20dp" />
+        android:text="%0"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#A62B4B"
+        android:layout_marginBottom="10dp" />
 
-    <!-- Başlangıç Seviyesi İlerleme Çubuğu -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genel Başarı Oranı"
+        android:textSize="16sp"
+        android:layout_marginBottom="30dp"
+        android:textColor="#7D2039" />
+
+    <!-- DETAYLI İSTATİSTİKLER (HATAYI ÇÖZEN KISIM) -->
+    <TextView
+        android:id="@+id/tvOgrenilenSayi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Öğrenilen Kelime: 0"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:textColor="#333333" />
+
+    <TextView
+        android:id="@+id/tvUstaSayi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tam Ezberlenen: 0"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textColor="#333333" />
+
+    <!-- İlerleme Çubukları -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Başlangıç Seviyesi"
-        android:textSize="14sp" />
+        android:text="Gelişim Seviyesi"
+        android:textSize="14sp"
+        android:textColor="#7D2039" />
 
     <ProgressBar
         android:id="@+id/pbBaslangic"
@@ -39,28 +71,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:max="100" />
-
-    <!-- Orta Seviye İlerleme Çubuğu -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Orta Seviye"
-        android:textSize="14sp" />
-
-    <ProgressBar
-        android:id="@+id/pbOrta"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:progressTint="#A62B4B"
         android:max="100" />
 
     <!-- Yazdır/PDF Kaydet Butonu -->
     <Button
         android:id="@+id/btnYazdir"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
         android:text="Raporu Yazdır (PDF)"
         android:backgroundTint="#A62B4B"
         android:textColor="#FFFFFF" />

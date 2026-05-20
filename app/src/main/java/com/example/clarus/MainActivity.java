@@ -2,6 +2,7 @@ package com.example.clarus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,13 +11,13 @@ import androidx.cardview.widget.CardView;
 /**
  * Hocam Merhaba,
  * Clarus projemizin ana kontrol merkezi (Dashboard).
- * İlk açılışta veritabanı kurulum işlemleri AcilisEkraniActivity'ye taşınmıştır.
- * Bu sınıf sadece arayüz bileşenlerini ve modüller arası geçişleri yönetir.
+ * Tüm modüller arası geçişler ve bilimsel tekrar motoru (SinavActivity)
+ * buradan tetiklenir.
  */
 public class MainActivity extends AppCompatActivity {
 
-    private CardView cardKelimeEkle, cardSinav, cardAnaliz, cardWordle, cardLLM, cardAyarlar;
-    private Button btnKelimeOgrenMain; // YENİ EKLENEN BUTON
+    private CardView cardKelimeEkle, cardSinav, cardAnaliz, cardWordle, cardLLM, cardAyarlar,card_kelimeler;
+    private Button btnKelimeOgrenMain;
     private VeritabaniYardimcisi vt;
 
     @Override
@@ -37,33 +38,47 @@ public class MainActivity extends AppCompatActivity {
         cardWordle     = findViewById(R.id.card_wordle);
         cardLLM        = findViewById(R.id.card_llm);
         cardAyarlar    = findViewById(R.id.card_ayarlar);
-
-        // YENİ BUTONUN EŞLEŞTİRİLMESİ
         btnKelimeOgrenMain = findViewById(R.id.btnKelimeOgrenMain);
+        card_kelimeler = findViewById(R.id.card_kelimeler);
     }
 
     private void tiklamaOlaylariniYonet() {
 
-        // YENİ MODÜLE GEÇİŞ TETİKLEYİCİSİ
+        // Kelime Öğrenme Modülü Geçişi
         btnKelimeOgrenMain.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, KelimeOgrenActivity.class)));
 
+        // Manuel Kelime Ekleme Modülü Geçişi
         cardKelimeEkle.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, KelimeEkleActivity.class)));
 
-        cardSinav.setOnClickListener(v ->
-                Toast.makeText(this, "Kelime öğrenme modülü başlatılıyor...", Toast.LENGTH_SHORT).show());
+        // SINAV MODÜLÜ GEÇİŞİ (DÜZELTİLDİ!)
+        cardSinav.setOnClickListener(v -> {
+            // Kullanıcıya bilgi veriyoruz
+            Toast.makeText(this, "Bilimsel Tekrar Sınavı Başlatılıyor...", Toast.LENGTH_SHORT).show();
+            // SinavActivity'ye geçişi tetikliyoruz
+            Intent intent = new Intent(MainActivity.this, SinavActivity.class);
+            startActivity(intent);
+        });
 
+        // Yapay Zeka / Hikaye Modülü Geçişi
         cardLLM.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, StoryChainActivity.class)));
 
+        // Wordle Oyunu Geçişi
         cardWordle.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, WordleActivity.class)));
 
+        // Rapor ve Analiz Modülü Geçişi
         cardAnaliz.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, ReportActivity.class)));
 
+        // Ayarlar Modülü Geçişi
         cardAyarlar.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
+
+        // DÜZELTİLMİŞ HALİ (Hedefi gerçek ekrana çevirdik)
+        card_kelimeler.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, KelimeOgrenActivity.class)));
     }
 }
