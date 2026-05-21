@@ -5,7 +5,7 @@ Bu proje, Yazılım Yapımı dersi kapsamında geliştirilmiştir.
 Projenin amacı, Scrum metodolojisi ve çevik yazılım geliştirme prensiplerine uygun şekilde kullanıcıların yabancı dil kelimelerini bilimsel zaman aralığı modeli ile kalıcı olarak öğrenmesini sağlayan 6 aşamalı bir mobil uygulama geliştirmektir.
 
 ## Kullanılan Teknolojiler
-- Java / Kotlin
+- Java
 - SQLite
 - Git & GitHub
 - Trello (Scrum Takibi)
